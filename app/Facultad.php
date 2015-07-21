@@ -30,4 +30,7 @@ class Facultad extends \App\BaseModel {
         return $this->belongsTo('\App\Campus', 'campus_id', 'id');
     }
 
+    public function departamentos() {
+        return \App\Departamento::with('facultad')->where('facultad_id', $this->id)->get();
+    }
 }

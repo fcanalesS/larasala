@@ -31,13 +31,25 @@ class WelcomeController extends Controller {
      * @return Response
      */
     public function index() {
-        $campus = \App\Campus::find(1);
+        $campus = \App\Campus::find(2);
         $facultades = $campus->facultades();
 
         foreach ($facultades as $facultad) {
-            $mensaje = sprintf("%s %s", $facultad->nombre, $facultad->campus->nombre);
 
-            Log::info($mensaje);
+            $departamentos = $facultad->departamentos();
+            foreach ($departamentos as $departamento) {
+
+                $escuelas = $departamento->escuelas();
+                foreach ($escuelas as $escuela) {
+
+                    $carreras = $escuela->carreras();
+                    foreach ($carreras as $carrera) {
+
+                        $mensaje = sprintf("[Facultad: %s] [Carrera: %s] [Campus: %s]", $facultad->nombre, $carrera->nombre, $carrera->escuela->departamento->facultad->campus->nombre);
+                        Log::info($mensaje);
+                    }
+                }
+            }
         }
 
         return view('welcome');
